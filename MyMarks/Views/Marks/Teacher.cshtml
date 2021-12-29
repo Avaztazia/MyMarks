@@ -1,0 +1,77 @@
+﻿@model MyMarks.ViewModels.TeacherMarksVm
+
+@{
+    ViewBag.Title = $"{Model.Group.Name}'s Marks";
+}
+
+<h2 id="title-h2" group-id="@Model.Group.Id">@Model.Group.Name Marks</h2>
+
+@foreach (var subject in Model.Subjects)
+{
+    <h4>@subject.Name</h4>
+    <p>Teacher: @subject.Teacher.FirstName @subject.Teacher.LastName, Credits: @subject.Credits</p>
+
+    <button class="btn btn-link" onclick="addPairModal('@subject.Id')">Add new pair</button>
+    <button class="btn btn-link" onclick="showAddStudentModal()">Add new student</button>
+    <div id="add-student-modal" class="visually-hidden">
+        <form>
+            <div class="mb-3">
+                <label class="form-label" for="student-first-name">First Name</label>
+                <input class="form-control" id="student-first-name" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="student-last-name">Last Name</label>
+                <input class="form-control" id="student-last-name" type="text">
+            </div>
+            <button class="btn btn-primary" type="submit" onclick="addStudent()">Submit</button>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+        <th scope="row">Full Name</th>
+        @foreach (var pair in subject.Pairs)
+        {
+            <th scope="col">@pair.PairDateTime.ToString("d")</th>
+        }
+        </thead>
+        <tbody>
+        @foreach (var student in Model.Group.Students.OrderBy(x => x.FirstName))
+        {
+            <tr>
+                <th scope="row">@(student.FirstName + " " + student.LastName)</th>
+                @foreach (var pair in subject.Pairs)
+                {
+                    var mark = pair.Marks.FirstOrDefault(x => x.Student.Id == student.Id);
+                    {
+                        @if (mark != null)
+                        {
+                            <th>
+                                <input asp-for="@mark.Grade"
+                                       pair-id="@pair.Id"
+                                       student-id="@student.Id"
+                                       teacher-id="@subject.Teacher.Id"
+                                       class="form-control"
+                                       onchange="saveMark(this)"
+                                       type="number"/>
+                            </th>
+                        }
+                        else
+                        {
+                            <th>
+                                <input asp-for="@mark!.Grade"
+                                       pair-id="@pair.Id"
+                                       student-id="@student.Id"
+                                       teacher-id="@subject.Teacher.Id"
+                                       class="form-control"
+                                       onchange="saveMark(this)"
+                                       type="number"/>
+                            </th>
+                        }
+                    }
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}

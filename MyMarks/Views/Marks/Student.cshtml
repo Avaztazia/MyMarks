@@ -1,0 +1,40 @@
+﻿@model MyMarks.ViewModels.StudentMarksVm
+
+@{
+    ViewBag.Title = $"{Model.Student.FirstName}'s Marks";
+}
+
+<h2>$"@Model.Student.FirstName's Marks"</h2>
+
+
+@foreach (var subject in Model.Subjects)
+{
+    <h4>@subject.Name</h4>
+    
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Mark</th>
+            <th scope="col">Teacher</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (var i = 0; i < subject.Pairs.Count; i++)
+        {
+            var pair = subject.Pairs[i];
+            var mark = pair.Marks.FirstOrDefault();
+            
+            if (mark is null) continue;
+
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@pair.PairDateTime.ToString("d")</td>
+                <td>@mark.Grade</td>
+                <td>@(mark.Teacher.FirstName + " " + mark.Teacher.LastName)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

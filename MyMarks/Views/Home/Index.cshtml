@@ -1,0 +1,20 @@
+﻿@model MyMarks.ViewModels.IndexPageVm
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Teacher.FirstName @Model.Teacher.LastName</h1>
+    <h4>Groups:</h4>
+
+    @foreach (var group in @Model.Groups)
+    {
+        <div class="margin-5">
+            
+            <a href="https://localhost:7114/marks/teacher/@group.Name">
+                <span class="input-group-text">@group.Name (@string.Join(',', group.Subjects.Select(x => x.Name)))</span>
+            </a>
+        </div>
+    }
+</div>

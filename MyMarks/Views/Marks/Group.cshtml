@@ -1,0 +1,43 @@
+﻿@model MyMarks.ViewModels.GroupMarksVm
+
+@{
+    ViewBag.Title = $"{Model.Group.Name}'s Marks";
+}
+
+<h2>@Model.Group.Name Marks</h2>
+
+@foreach (var subject in Model.Subjects)
+{
+    <h4>@subject.Name</h4>
+    <p>Teacher: @(subject.Teacher.FirstName + " " + subject.Teacher.LastName), Credits: @subject.Credits</p>
+
+    <table class="table">
+        <thead>
+        <th scope="row">Full Name</th>
+        @foreach (var pair in subject.Pairs)
+        {
+            <th scope="col">@pair.PairDateTime.ToString("d")</th>
+        }
+        </thead>
+        <tbody>
+        @foreach (var student in Model.Group.Students.OrderBy(x => x.FirstName))
+        {
+            <tr>
+                <th scope="row">@(student.FirstName + " " + student.LastName)</th>
+                @foreach (var mark in subject.Pairs
+                    .Select(p => p.Marks.FirstOrDefault(x => x.Student.Id == student.Id)))
+                {
+                    if (mark != null)
+                    {
+                        <td>@mark.Grade</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
