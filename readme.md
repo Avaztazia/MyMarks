@@ -25,7 +25,7 @@ Marks page for teacher (with editable mark fields)
 ![Teacher-View](./docs/images/teacher-view.png)
 
 Marks page for group (without editable mask fields)
-![Group-View](./docs/images/group-view.png)
+![Group-View](./docs/images/group-view.jpg)
 
 ### BL Layer
 
